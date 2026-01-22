@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="palatte_primary">#FFE633</color>
+    <color name="palatte_secondary">#121212</color>
+    <color name="palatte_gray_dark">#9DA5C1</color>
+    <color name="palatte_gray_light">#F2F3F8</color>
+    <color name="palatte_blue_soft">#F6F8FC</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>
