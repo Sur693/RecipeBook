@@ -1,18 +1,18 @@
 package com.hfad.recipebook.detail
-
+/*
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.hfad.recipebook.Routes
 import com.hfad.recipebook.data.converters.DataConverter
+import com.hfad.recipebook.data.locale.MealsDao
 import com.hfad.recipebook.data.remote.FoodApi
 import com.hfad.recipebook.model.RecipeDetail
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-
 
 sealed interface RecipeDetailUiState {
     data object Loading : RecipeDetailUiState
@@ -57,5 +57,5 @@ class RecipeDetailViewModel(
     }
 }
 
-
+*/
 

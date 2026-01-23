@@ -1,5 +1,6 @@
 package com.hfad.recipebook.data.converters
 
+import android.util.Log
 import com.hfad.recipebook.data.locale.RecipeEntity
 import com.hfad.recipebook.data.remote.MealDataModel
 import com.hfad.recipebook.model.RecipeDetail
@@ -43,9 +44,10 @@ class DataConverter(
 
     fun mealDataModelToPreview(model: MealDataModel): RecipePreview =
         with(model){
+            Log.d("MealDataModel", "Image URL: ${strMealThumb.orEmpty()}")
             RecipePreview(
                 id = idMeal,
-                imageRes = strImageSource.orEmpty(),
+                imageRes = strMealThumb,
                 category = strCategory.orEmpty(),
                 title = strMeal.orEmpty()
             )

@@ -10,6 +10,7 @@ data class MealDataModel(
     val strCategory: String? = null,
     val strArea: String? = null,
     val strInstructions: String? = null,
+    val strMealThumb: String? = null,
     val strTags: String? = null,
     val strYoutube: String? = null,
     val strIngredient1: String? = null,

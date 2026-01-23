@@ -1,7 +1,10 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.3.0"
 }
 
 android {
@@ -31,8 +34,10 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlinOptions {
-        jvmTarget = "11"
+    kotlin {
+        compilerOptions {
+            jvmTarget = JvmTarget.JVM_11
+        }
     }
     buildFeatures {
         compose = true
@@ -51,6 +56,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.engage.core)
     implementation(libs.transport.runtime)
+    implementation(libs.androidx.room.common.jvm)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -64,11 +70,21 @@ dependencies {
     implementation ("com.squareup.okhttp3:okhttp:5.3.2")
 
     // Kotlinx Serialization
-    implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
+    implementation ("org.jetbrains.kotlinx:kotlinx-serialization-json:1.10.0")
 
     // Retrofit с конвертером для Kotlinx Serialization
     implementation ("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0")
 
     // Retrofit для работы с API
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:retrofit:3.0.0")
+
+    // для загрузки изображений по URL.
+    implementation("io.coil-kt:coil-compose:2.7.0")
+
+    implementation("androidx.compose.ui:ui:1.10.1")
+    implementation("org.jetbrains.compose.foundation:foundation:1.10.0")
+    implementation("androidx.compose.foundation:foundation:1.10.1")
+    implementation("androidx.navigation:navigation-compose:2.9.6")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.10.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.10.0")
 }
