@@ -13,7 +13,7 @@ class DataConverter(
         with(model){
             RecipeDetail(
                 id = this.idMeal,
-                imageRes = this.strImageSource.orEmpty(),
+                imageRes = this.strMealThumb.orEmpty(),
                 category = this.strCategory.orEmpty(),
                 title = this.strMeal.orEmpty(),
                 ingredients = emptyList()

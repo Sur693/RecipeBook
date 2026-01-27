@@ -37,7 +37,7 @@ internal class HomeViewModel(
 
     private suspend fun getRecipes(): List<MealsResponse> {
         val results = mutableListOf<Deferred<MealsResponse>>()
-        repeat(1) {
+        repeat(10) {
             val deferred = viewModelScope.async(Dispatchers.IO){
                 FoodApi.retrofitService.getRandomMeal()
             }
