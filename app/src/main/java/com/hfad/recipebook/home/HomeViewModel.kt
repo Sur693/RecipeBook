@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hfad.recipebook.data.remote.FoodApi
-import com.hfad.recipebook.data.remote.MealDataModel
 import com.hfad.recipebook.data.remote.MealsResponse
 import com.hfad.recipebook.model.RecipePreview
 import kotlinx.coroutines.Deferred
@@ -14,7 +13,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.Dispatchers
-import com.hfad.recipebook.R
 import com.hfad.recipebook.data.converters.DataConverter
 
 internal class HomeViewModel(

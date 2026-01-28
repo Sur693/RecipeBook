@@ -4,24 +4,15 @@ package com.hfad.recipebook.data.remote
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.http.GET
 import retrofit2.http.Query
-import java.util.concurrent.TimeUnit
-
-val okHttpClient = OkHttpClient.Builder()
-    .connectTimeout(60, TimeUnit.SECONDS)  // Увеличиваем таймаут на подключение
-    .readTimeout(60, TimeUnit.SECONDS)     // Увеличиваем таймаут на чтение
-    .writeTimeout(60, TimeUnit.SECONDS)    // Увеличиваем таймаут на запись
-    .build()
 
 private const val BASE_URL = "https://www.themealdb.com/api/json/v1/1/"
 
 private val json = Json { ignoreUnknownKeys = true }
 val retrofit = Retrofit.Builder()
     .baseUrl(BASE_URL)
-    .client(okHttpClient)
     .addConverterFactory(json.asConverterFactory("application/json".toMediaType())) // используем сериализацию
     .build()
 

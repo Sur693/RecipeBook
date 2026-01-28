@@ -93,13 +93,11 @@ fun Header(){
 
         }
 
-
         Text(
             text = "Fridge",
             fontWeight = FontWeight.SemiBold,
             fontSize = 40.sp
         )
-
 
         IconButton( onClick = {},) {
             Image(

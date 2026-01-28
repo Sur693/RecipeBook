@@ -24,7 +24,6 @@ class RecipeBookApp : Application(), ImageLoaderFactory {
                     .maxSizePercent(0.25)
                     .build()
             }
-            // Уберите diskCache полностью
             .respectCacheHeaders(false)
             .build()
     }
