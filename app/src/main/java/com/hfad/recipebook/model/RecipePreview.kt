@@ -5,4 +5,6 @@ data class RecipePreview (
     val imageRes: String?,
     val category: String,
     val title: String,
+    val area: String,
+    val quantity: Int
 )

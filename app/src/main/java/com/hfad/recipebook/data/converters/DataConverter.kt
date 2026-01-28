@@ -47,7 +47,9 @@ class DataConverter(
                 id = idMeal,
                 imageRes = strMealThumb,
                 category = strCategory.orEmpty(),
-                title = strMeal.orEmpty()
+                title = strMeal.orEmpty(),
+                area = strArea.orEmpty(),
+                quantity = ingredients.size
             )
         }
 }
