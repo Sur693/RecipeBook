@@ -22,6 +22,9 @@ internal class HomeViewModel(
     private val _homeScreenState = MutableStateFlow<List<RecipePreview>>(listOf())
     val homeScreenState = _homeScreenState.asStateFlow()
 
+    private val _searchQuery = MutableStateFlow("")
+    val searchQuery = _searchQuery.asStateFlow()
+
     init{
         viewModelScope.launch{
             val allMeals: List<RecipePreview> = getRecipes()
@@ -42,5 +45,24 @@ internal class HomeViewModel(
             results.add(deferred)
         }
         return results.awaitAll()
+    }
+
+    fun searchRecipes(query: String) {
+        _searchQuery.value = query  // 1. Сохраняем текст поиска
+
+        if (query.isBlank()) {      // 2. Если поле пустое
+            _homeScreenState.value = emptyList()
+            return
+        }
+
+        viewModelScope.launch {      // 3. Запускаем корутину (асинхронный код)
+            try {
+                val response = FoodApi.retrofitService.searchMealsByName(query)  // 4. Делаем запрос к API
+                val meals = response.meals?.map { converter.mealDataModelToPreview(it) } ?: emptyList()  // 5. Конвертируем в RecipePreview
+                _homeScreenState.value = meals  // 6. Обновляем список рецептов
+            } catch (e: Exception) {
+                _homeScreenState.value = emptyList()  // 7. Если ошибка → показываем пустой список
+            }
+        }
     }
 }

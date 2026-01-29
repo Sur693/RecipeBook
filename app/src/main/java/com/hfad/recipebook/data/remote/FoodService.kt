@@ -27,6 +27,10 @@ internal interface FoodService{
     @GET("random.php")
     suspend fun getRandomMeal(): MealsResponse
 
-    @GET("lookup.php")  // value = можно убрать, это параметр по умолчанию
+    @GET("lookup.php") // по id
     suspend fun getRecipeById(@Query("i") id: String): MealsResponse
-}
+
+    @GET("search.php") // по названию
+    suspend fun searchMealsByName(@Query("s") query: String): MealsResponse
+
+    }

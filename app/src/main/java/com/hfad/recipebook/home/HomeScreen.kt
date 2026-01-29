@@ -20,6 +20,8 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -40,6 +42,7 @@ import com.hfad.recipebook.R
 import com.hfad.recipebook.data.converters.DataConverter
 import com.hfad.recipebook.ui.theme.Black
 import com.hfad.recipebook.ui.theme.BlueSoft
+import com.hfad.recipebook.ui.theme.GrayLight
 import com.hfad.recipebook.ui.theme.White
 
 
@@ -51,13 +54,20 @@ internal fun HomeScreen(
     )
 ){
     val state = viewModel.homeScreenState.collectAsState()
+    val searchQuery = viewModel.searchQuery.collectAsState()
 
     Column(modifier = Modifier.fillMaxSize()) {
         Header() //название + кнопка избранного + кнопка настройки
 
         Spacer(Modifier.height(40.dp))
 
-        //SearchBar() поисковая строка + фильтры (ингридиенты категории и страны)
+        Row() {
+            SearchBar(
+                query = searchQuery.value,
+                onQueryChange = { viewModel.searchRecipes(it) }
+            )
+        }
+
 
         Text(
             text = "Recipes you can make",
@@ -89,7 +99,7 @@ fun Header(){
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 30.dp),
+            .padding(top = 30.dp, start = 16.dp, end = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -99,7 +109,6 @@ fun Header(){
                 contentDescription = null,
                 modifier = Modifier.size(90.dp)
             )
-
         }
 
         Text(
@@ -116,6 +125,29 @@ fun Header(){
             )
         }
     }
+}
+
+@Composable
+fun SearchBar(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    TextField(
+        value = query,
+        onValueChange = onQueryChange,
+        modifier = modifier
+            .padding(16.dp),
+        placeholder = { Text("Search recipes") },
+        singleLine = true,
+        shape = RoundedCornerShape(24.dp),
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = GrayLight,      // Цвет фона когда активно
+            unfocusedContainerColor = GrayLight,    // Цвет фона когда неактивно
+            focusedIndicatorColor = Color.Transparent,
+            unfocusedIndicatorColor = Color.Transparent
+        )
+    )
 }
 
 @Composable
