@@ -1,12 +1,12 @@
 package com.hfad.recipebook.home
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,8 +18,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -35,39 +37,80 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.hfad.recipebook.R
-import com.hfad.recipebook.data.converters.DataConverter
 import com.hfad.recipebook.ui.theme.Black
 import com.hfad.recipebook.ui.theme.BlueSoft
+import com.hfad.recipebook.ui.theme.GrayDark
 import com.hfad.recipebook.ui.theme.GrayLight
 import com.hfad.recipebook.ui.theme.White
 
 
 @Composable
 internal fun HomeScreen(
-    navigateToDetailRecipe: (String) -> Unit,
-    viewModel: HomeViewModel = viewModel(
-        factory = HomeViewModelFactory(converter = DataConverter())
-    )
+    navigateToDetailRecipe: (String) -> Unit = {},
+    navigateToFilter: () -> Unit = {},
+    viewModel: HomeViewModel
 ){
     val state = viewModel.homeScreenState.collectAsState()
     val searchQuery = viewModel.searchQuery.collectAsState()
+    val activeFilter = viewModel.activeFilter.collectAsState()
+    val isLoading = viewModel.isLoading.collectAsState()
 
     Column(modifier = Modifier.fillMaxSize()) {
         Header() //название + кнопка избранного + кнопка настройки
 
-        Spacer(Modifier.height(40.dp))
-
-        Row() {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 30.dp, start = 16.dp, end = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             SearchBar(
                 query = searchQuery.value,
-                onQueryChange = { viewModel.searchRecipes(it) }
+                onQueryChange = { viewModel.searchRecipes(it) },
+                modifier = Modifier.weight(1f)
             )
+
+            IconButton( onClick = navigateToFilter){
+                Image(
+                    painter = painterResource(R.drawable.tune_60dp_000000_fill0_wght400_grad0_opsz48),
+                    contentDescription = null,
+                    modifier = Modifier.size(100.dp)
+                )
+            }
         }
 
+        if (activeFilter.value != null) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Filter: ${activeFilter.value?.second}",
+                    fontSize = 16.sp,
+                    color = GrayDark
+                )
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                TextButton(
+                    onClick = { viewModel.clearFilter() },
+                    contentPadding = PaddingValues(0.dp)
+                ) {
+                    Text(
+                        text = "Clear",
+                        fontSize = 16.sp,
+                        color = GrayDark
+                    )
+                }
+            }
+        }
+
+        Spacer(Modifier.height(10.dp))
 
         Text(
             text = "Recipes you can make",
@@ -76,21 +119,34 @@ internal fun HomeScreen(
             fontSize = 20.sp
         )
 
-        LazyColumn(
-            modifier = Modifier.fillMaxSize()
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .weight(1f)
         ){
-            items(state.value){ recipe ->
-                RecipeItem(
-                    imageRes = recipe.imageRes,
-                    name = recipe.title,
-                    category = recipe.category,
-                    quantity = recipe.quantity,
-                    area = recipe.area,
-                    onClick = {navigateToDetailRecipe(recipe.id)}
+            if (isLoading.value) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
                 )
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize()
+                ){
+                    items(state.value){ recipe ->
+                        RecipeItem(
+                            imageRes = recipe.imageRes,
+                            name = recipe.title,
+                            category = recipe.category,
+                            quantity = recipe.quantity,
+                            area = recipe.area,
+                            onClick = {navigateToDetailRecipe(recipe.id)}
+                        )
 
+                    }
+                }
             }
         }
+
     }
 }
 
@@ -107,7 +163,7 @@ fun Header(){
             Image(
                 painter = painterResource(R.drawable.favorite_60dp_000000_fill0_wght400_grad0_opsz48),
                 contentDescription = null,
-                modifier = Modifier.size(90.dp)
+                modifier = Modifier.size(100.dp)
             )
         }
 
@@ -121,7 +177,7 @@ fun Header(){
             Image(
                 painter = painterResource(R.drawable.settings_60dp_000000_fill0_wght400_grad0_opsz48),
                 null,
-                modifier = Modifier.size(90.dp)
+                modifier = Modifier.size(100.dp)
             )
         }
     }
@@ -136,14 +192,15 @@ fun SearchBar(
     TextField(
         value = query,
         onValueChange = onQueryChange,
-        modifier = modifier
-            .padding(16.dp),
+        modifier = modifier,
         placeholder = { Text("Search recipes") },
         singleLine = true,
         shape = RoundedCornerShape(24.dp),
         colors = TextFieldDefaults.colors(
             focusedContainerColor = GrayLight,      // Цвет фона когда активно
             unfocusedContainerColor = GrayLight,    // Цвет фона когда неактивно
+            focusedTextColor = Color.Black,      // цвет текста
+            unfocusedTextColor = Color.Black,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent
         )
@@ -159,7 +216,6 @@ fun RecipeItem(
     quantity: Int,
     onClick: () -> Unit
 ){
-    Log.d("DEBUG", "RecipeItem called! imageRes = $imageRes")
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -170,23 +226,10 @@ fun RecipeItem(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(imageRes)
                 .crossfade(true)
-                .listener(
-                    onStart = {
-                        Log.d("Coil", "START loading: $imageRes")
-                    },
-                    onSuccess = { _, _ ->
-                        Log.d("Coil", "SUCCESS: $imageRes")
-                    },
-                    onError = { _, result ->
-                        Log.e("Coil", "ERROR loading: $imageRes")
-                        Log.e("Coil", "Error: ${result.throwable.message}")
-                        result.throwable.printStackTrace()
-                    }
-                )
                 .build(),
             contentDescription = name,
             modifier = Modifier
-                .fillMaxWidth()  // картинка почти во всю ширину
+                .fillMaxWidth()
                 .height(250.dp)
                 .clip(RoundedCornerShape(16.dp)) // скругление углов
                 .background(Color.LightGray),
@@ -266,4 +309,3 @@ fun RecipeItem(
         }
     }
 }
-

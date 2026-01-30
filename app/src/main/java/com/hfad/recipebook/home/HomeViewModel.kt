@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.Dispatchers
 import com.hfad.recipebook.data.converters.DataConverter
+import com.hfad.recipebook.data.filter.FilterType
 
 internal class HomeViewModel(
     private val converter: DataConverter
@@ -22,47 +23,111 @@ internal class HomeViewModel(
     private val _homeScreenState = MutableStateFlow<List<RecipePreview>>(listOf())
     val homeScreenState = _homeScreenState.asStateFlow()
 
+    //поисковик
     private val _searchQuery = MutableStateFlow("")
     val searchQuery = _searchQuery.asStateFlow()
 
-    init{
-        viewModelScope.launch{
-            val allMeals: List<RecipePreview> = getRecipes()
-                .mapNotNull { it.meals }
-                .flatten()
-                .map { converter.mealDataModelToPreview(it) }
-            _homeScreenState.value = allMeals
-            Log.d("HomeViewModel", "Recipes loaded: ${allMeals.size}")
+    private val _activeFilter = MutableStateFlow<Pair<FilterType, String>?>(null)
+    val activeFilter = _activeFilter.asStateFlow()
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading = _isLoading.asStateFlow()
+
+
+    init {
+        loadRandomRecipes()
+    }
+
+    private fun loadRandomRecipes(){
+        viewModelScope.launch {
+            _isLoading.value = true
+
+            try {
+                val allMeals: List<RecipePreview> = getRecipes()
+                    .mapNotNull { it.meals }
+                    .flatten()
+                    .map { converter.mealDataModelToPreview(it) }
+
+                _homeScreenState.value = allMeals
+                Log.d("HomeViewModel", "Recipes loaded: ${allMeals.size}")
+
+            } catch (e: Exception) {
+                Log.e("HomeViewModel", "Error loading recipes", e)
+                _homeScreenState.value = emptyList()
+            } finally {
+                _isLoading.value = false
+            }
         }
     }
 
-    private suspend fun getRecipes(): List<MealsResponse> {
+
+    // получение рецепта
+    private suspend fun getRecipes(): List<MealsResponse> = try {
         val results = mutableListOf<Deferred<MealsResponse>>()
+
         repeat(10) {
-            val deferred = viewModelScope.async(Dispatchers.IO){
+            val deferred = viewModelScope.async(Dispatchers.IO) {
                 FoodApi.retrofitService.getRandomMeal()
             }
             results.add(deferred)
         }
-        return results.awaitAll()
+
+        results.awaitAll()
+
+    } catch (e: Exception) {
+        Log.e("HomeViewModel", "Error in getRecipes()", e)
+        emptyList()
     }
 
+
+    // поиск рецепта
     fun searchRecipes(query: String) {
-        _searchQuery.value = query  // 1. Сохраняем текст поиска
+        _searchQuery.value = query  // сохраняем текст поиска
 
-        if (query.isBlank()) {      // 2. Если поле пустое
-            _homeScreenState.value = emptyList()
-            return
-        }
+        viewModelScope.launch {
+            _isLoading.value = true
 
-        viewModelScope.launch {      // 3. Запускаем корутину (асинхронный код)
             try {
-                val response = FoodApi.retrofitService.searchMealsByName(query)  // 4. Делаем запрос к API
-                val meals = response.meals?.map { converter.mealDataModelToPreview(it) } ?: emptyList()  // 5. Конвертируем в RecipePreview
-                _homeScreenState.value = meals  // 6. Обновляем список рецептов
+                val response = FoodApi.retrofitService.searchMealsByName(query)  // запрос к API
+                val meals = response.meals?.map { converter.mealDataModelToPreview(it) } ?: emptyList()  // конвертируем в RecipePreview
+                _homeScreenState.value = meals  // обновляем список рецептов
             } catch (e: Exception) {
-                _homeScreenState.value = emptyList()  // 7. Если ошибка → показываем пустой список
+                _homeScreenState.value = emptyList()
+            } finally {
+                _isLoading.value = false
             }
         }
+    }
+
+
+    // поиск по фильтру
+    fun searchByFilter(filterValue: String, filterType: FilterType){
+        viewModelScope.launch {
+            _isLoading.value = true
+
+            try {
+                val response = when (filterType) {
+                    FilterType.AREA -> FoodApi.retrofitService.filterByArea(filterValue)
+                    FilterType.CATEGORY -> FoodApi.retrofitService.filterByCategory(filterValue)
+                    FilterType.INGREDIENT -> FoodApi.retrofitService.filterByIngredients(filterValue)
+                }
+                val mealsPreview: List<RecipePreview> = response.meals?.mapNotNull { mealSummary ->
+                    val fullMeal = FoodApi.retrofitService.getRecipeById(mealSummary.idMeal)
+                    fullMeal.meals?.firstOrNull()?.let { converter.mealDataModelToPreview(it) }
+                } ?: emptyList()
+
+                _homeScreenState.value = mealsPreview
+                _activeFilter.value = filterType to filterValue
+            } catch (e: Exception) {
+                _homeScreenState.value = emptyList()
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    fun clearFilter() {
+        _activeFilter.value = null
+        loadRandomRecipes()
     }
 }

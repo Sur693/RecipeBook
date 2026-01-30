@@ -31,6 +31,15 @@ internal interface FoodService{
     suspend fun getRecipeById(@Query("i") id: String): MealsResponse
 
     @GET("search.php") // по названию
-    suspend fun searchMealsByName(@Query("s") query: String): MealsResponse
+    suspend fun searchMealsByName(@Query("s") name: String): MealsResponse
 
-    }
+    @GET("filter.php")
+    suspend fun filterByCategory(@Query("c") category: String): MealsResponse
+
+    @GET("filter.php")
+    suspend fun filterByArea(@Query("a") area: String): MealsResponse
+
+    @GET("filter.php")
+    suspend fun filterByIngredients(@Query("i") ingredient: String): MealsResponse
+
+}
