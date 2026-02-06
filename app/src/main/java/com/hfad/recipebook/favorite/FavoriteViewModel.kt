@@ -40,7 +40,7 @@ class FavoriteViewModel (
                 // ← ИСПРАВЛЕНИЕ: фильтруем ТЕКУЩИЙ список
                 val currentRecipes = _favoriteScreenState.value
                 val filteredRecipes = currentRecipes.filter { recipe ->
-                    recipe.id in favoriteIds  // Оставляем только те, что есть в избранном
+                    recipe.id in favoriteIds
                 }
                 _favoriteScreenState.value = filteredRecipes
             }
@@ -48,7 +48,7 @@ class FavoriteViewModel (
     }
 
     fun toggleFavorite(id: String) {
-        repository.toggle(id)  // ← Не нужен launch, toggle уже синхронный
+        repository.toggle(id)
     }
 
     private fun loadRecipes(){

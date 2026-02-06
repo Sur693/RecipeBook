@@ -17,7 +17,7 @@ class FavoritesRepository(
     private val prefs = context.getSharedPreferences("favorites", Context.MODE_PRIVATE)
 
     private val _favorites = MutableStateFlow(load())
-    val favorites: StateFlow<Set<String>> = _favorites.asStateFlow()  // ← Публичный StateFlow
+    val favorites: StateFlow<Set<String>> = _favorites.asStateFlow()
 
     private fun load(): Set<String> {
         val result = prefs.getStringSet("ids", emptySet()) ?: emptySet()

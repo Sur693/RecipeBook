@@ -185,9 +185,9 @@ fun SearchBar(
         singleLine = true,
         shape = RoundedCornerShape(24.dp),
         colors = TextFieldDefaults.colors(
-            focusedContainerColor = GrayLight,      // Цвет фона когда активно
-            unfocusedContainerColor = GrayLight,    // Цвет фона когда неактивно
-            focusedTextColor = Color.Black,      // цвет текста
+            focusedContainerColor = GrayLight,  // цвет фона когда активно
+            unfocusedContainerColor = GrayLight, // цвет фона когда неактивно
+            focusedTextColor = Color.Black, // цвет текста
             unfocusedTextColor = Color.Black,
             focusedIndicatorColor = Color.Transparent,
             unfocusedIndicatorColor = Color.Transparent
@@ -230,7 +230,7 @@ fun RecipeItem(
                     .padding(16.dp)
                     .background(
                         color = Black.copy(alpha = 0.2f), // полупрозрачный чёрный
-                        shape = RoundedCornerShape(16.dp)       // скругление углов
+                        shape = RoundedCornerShape(16.dp) // скругление углов
                     )
                     .padding(horizontal = 12.dp, vertical = 6.dp) // внутренние отступы
             ) {

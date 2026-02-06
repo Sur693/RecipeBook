@@ -41,15 +41,15 @@ class RecipeDetailViewModel(
 
     private fun loadRecipe(recipeId: String) {
         viewModelScope.launch {
-            _detailScreenState.value = RecipeDetailUiState.Loading  // ← Показываем загрузку
+            _detailScreenState.value = RecipeDetailUiState.Loading  // показываем загрузку
 
             try {
-                val response = FoodApi.retrofitService.getRecipeById(recipeId)  // ← Загружаем КОНКРЕТНЫЙ рецепт
+                val response = FoodApi.retrofitService.getRecipeById(recipeId)
                 val meal = response.meals?.firstOrNull()
 
                 if (meal != null) {
-                    val recipeDetail = converter.mealDataModelToDetail(meal)  // ← Используйте правильный конвертер
-                    val videoId = extractYoutubeVideoId(recipeDetail.videoRes)  // ← Извлекаем ID
+                    val recipeDetail = converter.mealDataModelToDetail(meal)
+                    val videoId = extractYoutubeVideoId(recipeDetail.videoRes)  // извлекаем ID
 
                     _detailScreenState.value = RecipeDetailUiState.Recipe(
                         value = recipeDetail,
@@ -64,21 +64,8 @@ class RecipeDetailViewModel(
         }
     }
 
-    fun getYoutubeVideoId(): String? {
-        val currentState = _detailScreenState.value
-        if (currentState is RecipeDetailUiState.Recipe) {
-            return extractYoutubeVideoId(currentState.value.videoRes)
-        }
-        return null
-    }
-
     fun extractYoutubeVideoId(url: String?): String? {
         if (url.isNullOrEmpty()) return null
-
-        // Поддерживает форматы:
-        // https://www.youtube.com/watch?v=VIDEO_ID
-        // https://youtu.be/VIDEO_ID
-        // https://m.youtube.com/watch?v=VIDEO_ID
 
         val patterns = listOf(
             "(?<=watch\\?v=)[^&]+".toRegex(),

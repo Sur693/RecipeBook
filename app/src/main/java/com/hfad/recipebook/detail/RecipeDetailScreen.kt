@@ -82,7 +82,7 @@ fun RecipeDetailScreen(
                             .padding(top = 30.dp, start = 16.dp, end = 16.dp)
                             .background(
                                 color = White.copy(alpha = 0.5f), // полупрозрачный чёрный
-                                shape = RoundedCornerShape(16.dp)       // скругление углов
+                                shape = RoundedCornerShape(16.dp)  // скругление углов
                             )
                     ) {
                         IconButton(
@@ -101,7 +101,7 @@ fun RecipeDetailScreen(
                             .padding(top = 30.dp, start = 16.dp, end = 16.dp)
                             .background(
                                 color = White.copy(alpha = 0.5f),
-                                shape = RoundedCornerShape(16.dp)       // скругление углов
+                                shape = RoundedCornerShape(16.dp) // скругление углов
                             )
                     ) {
                         IconButton(

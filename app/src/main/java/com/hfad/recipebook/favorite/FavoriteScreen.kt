@@ -151,7 +151,7 @@ fun RecipeItem(
                 .padding(16.dp)
                 .background(
                     color = Black.copy(alpha = 0.2f), // полупрозрачный чёрный
-                    shape = RoundedCornerShape(16.dp)       // скругление углов
+                    shape = RoundedCornerShape(16.dp) // скругление углов
                 )
                 .padding(horizontal = 12.dp, vertical = 6.dp) // внутренние отступы
         ) {

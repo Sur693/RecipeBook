@@ -82,14 +82,14 @@ fun RecipeBookScreen(){
         composable(
             route = Screen.Detail.route,  // "detail/{recipeId}"
             arguments = listOf(
-                navArgument("recipeId") { type = NavType.StringType }  // ← Объявляем аргумент
+                navArgument("recipeId") { type = NavType.StringType }  // объявляем аргумент
             )
         ) { backStackEntry ->
-            val recipeId = backStackEntry.arguments?.getString("recipeId")  // ← Достаём ID
+            val recipeId = backStackEntry.arguments?.getString("recipeId")  // достаём ID
 
             RecipeDetailScreen(
                 navController = navController,
-                recipeId = recipeId ?: "",  // ← Передаём в DetailScreen
+                recipeId = recipeId ?: "",  // передаём в DetailScreen
                 onApply = {
                     navController.popBackStack()
                 },
