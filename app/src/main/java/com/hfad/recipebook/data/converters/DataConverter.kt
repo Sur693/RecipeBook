@@ -15,7 +15,12 @@ class DataConverter(
                 imageRes = this.strMealThumb.orEmpty(),
                 category = this.strCategory.orEmpty(),
                 title = this.strMeal.orEmpty(),
-                ingredients = emptyList()
+                area = this.strArea.orEmpty(),
+                ingredients = this.ingredients,
+                measures = this.measures,
+                videoRes = this.strYoutube.orEmpty(),
+                instruction = this.strInstructions.orEmpty(),
+                quantity = ingredients.size
             )
         }
 
@@ -29,7 +34,7 @@ class DataConverter(
                 strImageSource = this.imageRes
             )
         }
-
+/*
     fun recipeEntityToDetail(entity: RecipeEntity): RecipeDetail =
         with(entity){
             RecipeDetail(
@@ -39,7 +44,7 @@ class DataConverter(
             title = strMeal.orEmpty(),
             ingredients = emptyList()
         )
-    }
+    }*/
 
     fun mealDataModelToPreview(model: MealDataModel): RecipePreview =
         with(model){

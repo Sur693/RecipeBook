@@ -51,6 +51,7 @@ import com.hfad.recipebook.ui.theme.White
 internal fun HomeScreen(
     navigateToDetailRecipe: (String) -> Unit = {},
     navigateToFilter: () -> Unit = {},
+    navigateToFavorite: () -> Unit = {},
     viewModel: HomeViewModel
 ){
     val state = viewModel.homeScreenState.collectAsState()
@@ -59,12 +60,23 @@ internal fun HomeScreen(
     val isLoading = viewModel.isLoading.collectAsState()
 
     Column(modifier = Modifier.fillMaxSize()) {
-        Header() //название + кнопка избранного + кнопка настройки
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 24.dp),
+            contentAlignment = Alignment.TopCenter
+        ) {
+            Text(
+                text = "Fridge",
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 40.sp
+            )
+        }
 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 30.dp, start = 16.dp, end = 16.dp),
+                .padding(top = 30.dp, start = 16.dp, end = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             SearchBar(
@@ -77,7 +89,15 @@ internal fun HomeScreen(
                 Image(
                     painter = painterResource(R.drawable.tune_60dp_000000_fill0_wght400_grad0_opsz48),
                     contentDescription = null,
-                    modifier = Modifier.size(100.dp)
+                    modifier = Modifier.size(90.dp)
+                )
+            }
+
+            IconButton( onClick = navigateToFavorite){
+                Image(
+                    painter = painterResource(R.drawable.favorite_60dp_000000_fill0_wght400_grad0_opsz48),
+                    contentDescription = null,
+                    modifier = Modifier.size(90.dp)
                 )
             }
         }
@@ -150,38 +170,6 @@ internal fun HomeScreen(
     }
 }
 
-@Composable
-fun Header(){
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 30.dp, start = 16.dp, end = 16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        IconButton( onClick = {}){
-            Image(
-                painter = painterResource(R.drawable.favorite_60dp_000000_fill0_wght400_grad0_opsz48),
-                contentDescription = null,
-                modifier = Modifier.size(100.dp)
-            )
-        }
-
-        Text(
-            text = "Fridge",
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 40.sp
-        )
-
-        IconButton( onClick = {},) {
-            Image(
-                painter = painterResource(R.drawable.settings_60dp_000000_fill0_wght400_grad0_opsz48),
-                null,
-                modifier = Modifier.size(100.dp)
-            )
-        }
-    }
-}
 
 @Composable
 fun SearchBar(

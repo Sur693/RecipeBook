@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.Dispatchers
 import com.hfad.recipebook.data.converters.DataConverter
-import com.hfad.recipebook.data.filter.FilterType
+import com.hfad.recipebook.filter.FilterType
 
 internal class HomeViewModel(
     private val converter: DataConverter
