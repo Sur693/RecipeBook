@@ -1,10 +1,11 @@
+
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.3.0"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.3.10"
 }
 
 android {
@@ -18,7 +19,10 @@ android {
         versionCode = 1
         versionName = "1.0"
 
+        testApplicationId = "com.example.test"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testHandleProfiling = true
+        testFunctionalTest = true
     }
 
     buildTypes {
@@ -58,7 +62,6 @@ dependencies {
     implementation(libs.engage.core)
     implementation(libs.transport.runtime)
     implementation(libs.androidx.room.common.jvm)
-    testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
@@ -92,6 +95,36 @@ dependencies {
     // YouTube Player
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
 
-    implementation("androidx.datastore:datastore-preferences:1.1.1")
+    implementation("androidx.datastore:datastore-preferences:1.2.0")
+
+    testImplementation ("junit:junit:4.13.2")
+    testImplementation ("org.hamcrest:hamcrest-core:1.3")
+    testImplementation ("androidx.arch.core:core-testing:2.2.0")
+    testImplementation ("org.robolectric:robolectric:4.11.1")
+
+    // AndroidX Test - JVM testing
+    testImplementation ("androidx.test:core-ktx:1.6.1")
+    testImplementation("androidx.test.ext:junit:1.3.0")
+    // AndroidX Test - Instrumented testing
+    androidTestImplementation ("androidx.test.ext:junit:1.3.0")
+    androidTestImplementation ("androidx.test.espresso:espresso-core:3.7.0")
+
+
+    androidTestImplementation(platform("androidx.compose:compose-bom:2024.12.01"))
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.1")
+
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    debugImplementation("androidx.compose.ui:ui-tooling")
+
+
+    testImplementation("junit:junit:4.13.2")
+
+    // андроид тесты
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
 }

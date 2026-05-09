@@ -11,6 +11,10 @@ composeBom = "2026.01.00"
 engageCore = "1.5.11"
 transportRuntime = "4.0.0"
 roomCommonJvm = "2.8.4"
+junitJupiter = "5.14.0"
+junitPlatformLauncher = "1.13.4"
+junitPlatformEngine = "1.13.4"
+journeysJunitEngine = "0.2.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -30,6 +34,10 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 engage-core = { group = "com.google.android.engage", name = "engage-core", version.ref = "engageCore" }
 transport-runtime = { group = "com.google.android.datatransport", name = "transport-runtime", version.ref = "transportRuntime" }
 androidx-room-common-jvm = { group = "androidx.room", name = "room-common-jvm", version.ref = "roomCommonJvm" }
+junit-jupiter = { group = "org.junit.jupiter", name = "junit-jupiter", version.ref = "junitJupiter" }
+junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version.ref = "junitPlatformLauncher" }
+junit-platform-engine = { group = "org.junit.platform", name = "junit-platform-engine", version.ref = "junitPlatformEngine" }
+journeys-junit-engine = { group = "com.android.tools.journeys", name = "journeys-junit-engine", version.ref = "journeysJunitEngine" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
