@@ -1,0 +1,10 @@
+package com.hfad.recipebook.domain.model
+
+data class RecipePreview (
+    val id: String,
+    val imageRes: String?,
+    val category: String,
+    val title: String,
+    val area: String,
+    val quantity: Int
+)

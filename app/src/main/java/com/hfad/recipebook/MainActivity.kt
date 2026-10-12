@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.hfad.recipebook.ui.navigation.AppNavigation
 import com.hfad.recipebook.ui.theme.RecipeBookTheme
 
 class MainActivity : ComponentActivity() {
@@ -12,7 +13,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             RecipeBookTheme {
-                RecipeBookScreen()
+                AppNavigation()
             }
         }
     }

@@ -22,7 +22,7 @@ internal object FoodApi {
     }
 }
 
-internal interface FoodService{
+    interface FoodService{
 
     @GET("random.php")
     suspend fun getRandomMeal(): MealsResponse
