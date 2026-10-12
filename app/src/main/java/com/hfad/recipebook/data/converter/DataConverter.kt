@@ -4,8 +4,9 @@ package com.hfad.recipebook.data.converter
 import com.hfad.recipebook.data.remote.MealDataModel
 import com.hfad.recipebook.domain.model.RecipeDetail
 import com.hfad.recipebook.domain.model.RecipePreview
+import jakarta.inject.Inject
 
-class DataConverter {
+class DataConverter @Inject constructor() {
     fun mealDataModelToDetail(model: MealDataModel): RecipeDetail =
         with(model){
             RecipeDetail(

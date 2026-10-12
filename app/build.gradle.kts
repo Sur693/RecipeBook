@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     id("org.jetbrains.kotlin.plugin.serialization") version "2.4.20"
     id("com.google.devtools.ksp")
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -96,9 +97,6 @@ dependencies {
     // YouTube Player
     implementation("com.pierfrancescosoffritti.androidyoutubeplayer:core:12.1.0")
 
-<<<<<<< HEAD
-    implementation("androidx.datastore:datastore-preferences:1.2.0")
-
     testImplementation ("junit:junit:4.13.2")
     testImplementation ("org.hamcrest:hamcrest-core:1.3")
     testImplementation ("androidx.arch.core:core-testing:2.2.0")
@@ -136,4 +134,9 @@ dependencies {
 
     // иконки
     implementation("androidx.compose.material:material-icons-extended")
+
+    // hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 }

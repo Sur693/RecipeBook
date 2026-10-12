@@ -5,12 +5,15 @@ import com.hfad.recipebook.data.local.FavoriteDao
 import com.hfad.recipebook.data.local.toDomain
 import com.hfad.recipebook.data.local.toEntity
 import com.hfad.recipebook.domain.model.RecipeDetail
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 
 // Класс репозитория, который принимает инструмент запросов к базе (FavoriteDao)
-class FavoritesRepository(
+@Singleton
+class FavoritesRepository @Inject constructor( // создание репозитория через конструктор
     private val favoriteDao: FavoriteDao
 ) {
     // получаем из базы список строк, конвертируем в модели приложения и отдаем наружу

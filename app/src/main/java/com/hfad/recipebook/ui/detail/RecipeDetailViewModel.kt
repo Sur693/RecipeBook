@@ -1,14 +1,14 @@
 package com.hfad.recipebook.ui.detail
 
-import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hfad.recipebook.data.converter.DataConverter
-import com.hfad.recipebook.data.remote.FoodApi
 import com.hfad.recipebook.data.remote.FoodService
 import com.hfad.recipebook.data.repository.FavoritesRepository
 import com.hfad.recipebook.domain.model.RecipeDetail
-import kotlinx.coroutines.flow.Flow
+import dagger.hilt.android.lifecycle.HiltViewModel
+import jakarta.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -27,12 +27,18 @@ sealed interface RecipeDetailUiState {
     data object Error: RecipeDetailUiState
 }
 
-class RecipeDetailViewModel(
-    private val recipeId: String,
+@HiltViewModel
+class RecipeDetailViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle, // объект, через который ViewModel получает сохраненные параметры (recipeId) и состояние
     private val converter: DataConverter,
     private val repository: FavoritesRepository,
     private val foodService: FoodService
-): ViewModel() {
+) : ViewModel() {
+
+    // Берём аргумент с ключом "recipeId" из SavedStateHandle.
+    // checkNotNull - если параметр отсутствует, выбросить исключение, а не продолжать работу с null
+    private val recipeId: String =
+        checkNotNull(savedStateHandle["recipeId"])
 
     private val _detailScreenState = MutableStateFlow<RecipeDetailUiState>(RecipeDetailUiState.Loading)
     val detailScreenState = _detailScreenState.asStateFlow()
