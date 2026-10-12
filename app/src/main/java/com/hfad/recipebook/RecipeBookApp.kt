@@ -1,30 +1,23 @@
 package com.hfad.recipebook
 
 import android.app.Application
-import coil.ImageLoader
-import coil.ImageLoaderFactory
-import coil.memory.MemoryCache
-import okhttp3.OkHttpClient
-import okhttp3.Protocol
-import java.util.concurrent.TimeUnit
-class RecipeBookApp : Application(), ImageLoaderFactory {
-    override fun newImageLoader(): ImageLoader {
-        val okHttpClient = OkHttpClient.Builder()
-            .connectTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
-            .protocols(listOf(Protocol.HTTP_1_1))
-            .retryOnConnectionFailure(true)
-            .build()
+import androidx.room.Room
+import com.hfad.recipebook.data.local.AppDataBase
+import com.hfad.recipebook.data.repository.FavoritesRepository
 
-        return ImageLoader.Builder(this)
-            .okHttpClient(okHttpClient)
-            .memoryCache {
-                MemoryCache.Builder(this)
-                    .maxSizePercent(0.25)
-                    .build()
-            }
-            .respectCacheHeaders(false)
-            .build()
+class RecipeBookApp : Application() {
+
+    // база создается один раз при первом обращении и дальше переиспользуется
+    val database: AppDataBase by lazy {
+        Room.databaseBuilder(
+            this,                       // контекст приложения
+            AppDataBase::class.java,    // класс нашей базы
+            "fridge_db.db"              // имя файла базы на устройстве
+        ).build()
+    }
+
+    // репозиторий получает Dao из базы
+    val favoritesRepository: FavoritesRepository by lazy {
+        FavoritesRepository(database.favoriteDao())
     }
 }
