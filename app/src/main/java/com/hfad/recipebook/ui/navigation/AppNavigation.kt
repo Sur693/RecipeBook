@@ -90,7 +90,9 @@ fun AppNavigation(
                 navController.getBackStackEntry(Screen.Home)
             }
             // берем ViewModel, которая принадлежит главному экрану
-            val homeViewModel: HomeViewModel = viewModel(viewModelStoreOwner = homeEntry)
+            val homeViewModel: HomeViewModel = viewModel(
+                factory = HomeViewModelFactory(DataConverter())
+            )
 
             FilterScreen(
                 onBackClick = { navController.popBackStack() },
