@@ -11,7 +11,6 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.Dispatchers
 import com.hfad.recipebook.data.converter.DataConverter
 import com.hfad.recipebook.data.remote.FoodService
 import com.hfad.recipebook.domain.model.FilterType
@@ -70,7 +69,7 @@ class HomeViewModel @Inject constructor(
         val results = mutableListOf<Deferred<MealsResponse>>()
 
         repeat(10) {
-            val deferred = viewModelScope.async(Dispatchers.IO) {
+            val deferred = viewModelScope.async {
                 foodService.getRandomMeal()
             }
             results.add(deferred)
